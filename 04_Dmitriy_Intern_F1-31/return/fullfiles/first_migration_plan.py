@@ -1,0 +1,149 @@
+"""Build a verified migration plan without executing SQL."""
+
+from collections import namedtuple
+from hashlib import sha256
+from pathlib import Path
+
+
+MigrationPlan = namedtuple(
+    "MigrationPlan",
+    "status entries required_preflight",
+)
+
+# Фиксированные пути и контрольные суммы из CONTRACT.json.
+# Порядок: sales -> inbox -> leases.
+_EXPECTED = (
+    (
+        "migrations/002_sales_manager.sql",
+        "65222135321a281fa53c3327f8ef85d9bcd796437a79210414c0badf2981727d",
+    ),
+    (
+        "f1_07_inbox/migrations/001_inbox_events.sql",
+        "8c28a9934a418aea0688342ee6f6d1abf8b6085a7e22ad0d98b2f2629cd3168d",
+    ),
+    (
+        "first_task_leases/migrations/001_task_leases.sql",
+        "0e39359128218d00c00366f890c08007cad33fb057840af0722c05b2a9a213c8",
+    ),
+)
+
+# Это список будущих внешних проверок.
+# Наша функция НЕ утверждает, что они уже выполнены.
+_REQUIRED_PREFLIGHT = (
+    (
+        "Existing externally verified runtime_next foundation including "
+        "runtime_next.tasks and its original created_at/status columns; "
+        "this package does not establish existence or compatibility."
+    ),
+    "Sales SQL fixed runtime_next namespace; do not rewrite SQL.",
+    (
+        "Inbox schema separately validated by existing "
+        "f1_07_inbox.store.validate_schema and composed by existing "
+        "f1_07_inbox.migrate._migration_statements/apply_migration."
+    ),
+    (
+        "Lease isolated schema and Identifier renderer require "
+        "integration-owner verification; first_task_leases.store "
+        "supplies no migration executor."
+    ),
+    (
+        "Integration owner verifies structure, migration lineage/replay, "
+        "transaction behavior and regression before applying all entries."
+    ),
+)
+
+
+def _reject_links(path):
+    """Проверяем сам путь и каждый родительский каталог."""
+    for component in (path, *path.parents):
+        if component.is_symlink():
+            raise ValueError("UNSAFE_PATH")
+
+        # Junction в Windows тоже перенаправляет путь.
+        if (
+            hasattr(component, "is_junction")
+            and component.is_junction()
+        ):
+            raise ValueError("UNSAFE_PATH")
+
+
+def build_migration_plan(root, *, schema="runtime_next"):
+    # 1. Проверяем schema раньше root и любых обращений к файлам.
+    if type(schema) is not str or schema != "runtime_next":
+        raise ValueError("SCHEMA_UNSUPPORTED")
+
+    # По контракту разрешены обычная строка или объект Path.
+    if type(root) is not str and not isinstance(root, Path):
+        raise ValueError("INVALID_ROOT")
+
+    try:
+        root_path = Path(root)
+    except (TypeError, ValueError):
+        raise ValueError("INVALID_ROOT") from None
+
+    # ".." запрещён даже тогда, когда ведёт обратно в ту же папку.
+    if ".." in root_path.parts:
+        raise ValueError("UNSAFE_PATH")
+
+    if "\x00" in str(root_path):
+        raise ValueError("INVALID_ROOT")
+
+    # 2. Проверяем корневую папку и ссылки среди её родителей.
+    try:
+        root_path = root_path.absolute()
+        _reject_links(root_path)
+
+        if not root_path.is_dir():
+            raise ValueError("INVALID_ROOT")
+
+        resolved_root = root_path.resolve()
+    except OSError:
+        raise ValueError("INVALID_ROOT") from None
+
+    # 3. Проверяем безопасность ВСЕХ путей до чтения SQL.
+    paths = []
+
+    for relative_path, expected_hash in _EXPECTED:
+        path = root_path / relative_path
+
+        try:
+            _reject_links(path)
+            resolved_path = path.resolve()
+        except (OSError, RuntimeError):
+            raise ValueError("UNSAFE_PATH") from None
+
+        if not resolved_path.is_relative_to(resolved_root):
+            raise ValueError("UNSAFE_PATH")
+
+        paths.append((relative_path, expected_hash, path))
+
+    # 4. Каждый путь должен указывать на обычный файл.
+    for _, _, path in paths:
+        try:
+            if not path.is_file():
+                raise ValueError("MISSING_MIGRATION")
+        except OSError:
+            raise ValueError("MISSING_MIGRATION") from None
+
+    # 5. Читаем байты и сравниваем SHA-256.
+    entries = []
+
+    for relative_path, expected_hash, path in paths:
+        try:
+            raw_bytes = path.read_bytes()
+        except OSError:
+            raise ValueError("MISSING_MIGRATION") from None
+
+        if sha256(raw_bytes).hexdigest() != expected_hash:
+            raise ValueError("HASH_MISMATCH")
+
+        # Сохраняем переводы строк и placeholders без изменений.
+        raw_sql = raw_bytes.decode("utf-8")
+        entries.append((relative_path, expected_hash, raw_sql))
+
+    # 6. Возвращаем неизменяемый результат после всех проверок.
+    return MigrationPlan(
+        status="PLANNED_NOT_AUTHORIZED",
+        entries=tuple(entries),
+        required_preflight=_REQUIRED_PREFLIGHT,
+    )

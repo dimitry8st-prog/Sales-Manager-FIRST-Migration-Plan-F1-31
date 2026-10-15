@@ -1,0 +1,81 @@
+{
+  "task_id": "F1-31",
+  "revision": "R1",
+  "generated_at_utc": "2026-10-15T18:52:33.218509+00:00",
+  "python_version": "3.12.8 (tags/v3.12.8:2dc476b, Dec  3 2024, 19:30:04) [MSC v.1942 64 bit (AMD64)]",
+  "changed_paths": [
+    "src/first_migration_plan.py",
+    "tests/test_candidate_plan.py",
+    "docs/IMPLEMENTATION.md",
+    "return/patch.diff",
+    "return/fullfiles/first_migration_plan.py",
+    "return/test.log",
+    "return/RESULT.json"
+  ],
+  "checks": [
+    {
+      "command": [
+        "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "CHECK_PACKAGE.py"
+      ],
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "status": "PASS"
+    }
+  ],
+  "test_count": 15,
+  "protected_files": "PASS",
+  "fullfile_byte_match": "PASS",
+  "source_sha256": "5da5a2abc2b7245db5f12dfa9fd1feb2e2de1725236cb2c25a43615fa080c341",
+  "test_file": "tests/test_candidate_plan.py",
+  "test_method_lines": {
+    "test_schema_checked_before_filesystem": {
+      "start_line": 22,
+      "end_line": 33
+    },
+    "test_module_load_has_no_filesystem_io": {
+      "start_line": 151,
+      "end_line": 234
+    },
+    "test_exact_function_signature": {
+      "start_line": 236,
+      "end_line": 260
+    }
+  },
+  "pyright_comment_lines": [
+    32
+  ],
+  "audit_corrections": [
+    "Fixed indentation so module execution check actually runs.",
+    "Added a control check that the open blocker raises.",
+    "Restored the separate function-signature test.",
+    "Documented intentional invalid-type arguments for Pylance."
+  ],
+  "patch_note": "Patch against the issued source skeleton; patch text uses LF. The full source copy preserves the current file bytes exactly.",
+  "plan_status": "PLANNED_NOT_AUTHORIZED",
+  "integration_status": "NOT_CONNECTED",
+  "database_tests": "NOT_RUN",
+  "e2e_tests": "NOT_RUN",
+  "sql_execution": "NOT_RUN",
+  "limitations": [
+    "No database connection or DDL execution.",
+    "Foundation existence and compatibility are not verified.",
+    "required_preflight declares pending integration-owner checks.",
+    "Import test covers intercepted filesystem operations only.",
+    "Final ZIP inspection and external acceptance are still pending."
+  ]
+}

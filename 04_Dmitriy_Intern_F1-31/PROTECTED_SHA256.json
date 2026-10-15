@@ -1,0 +1,16 @@
+{
+  "CHECK_PACKAGE.py": "926f988986376136dcdc7f752e99bb54827378b468eb2e264e6a9e1037ff8f44",
+  "TASK_ORDER_RU.md": "df845c138a558333cebeb0b2a3e0dafdde3c4a34ab0278ffbcc078f4f0f264f3",
+  "RETURN_GUIDE.md": "a6afa97d9b0f3e1dbe7e5adce89b67800e5ca7aa773bf913a11b6118b6b3741b",
+  "CONTRACT.json": "66ec74252f0788d49d54c554285aaa6c9eab1acd51f4b8bec12aa887b14d88ff",
+  "INTEGRATION.md": "f6f0e298dfaf6e96d0935362fc22da5d7994ce543eb60b576d9931ef6a56bcde",
+  "fixtures/expected_migrations.json": "428bc7cc90cc4dcd706754ef677268d2503ed2cd3a09f289bc1af268db015d98",
+  "reference/migrate.py": "dd7e29ac97f1c7917fb91982a2a48bc92364b1710efe4a8728379944c183ea6b",
+  "tests/test_public.py": "b0bb9ff532c0d1bd1c2d32c088c296a1126421a90916e7cdbef057d766f37dfa",
+  "reference/migrations/002_sales_manager.sql": "65222135321a281fa53c3327f8ef85d9bcd796437a79210414c0badf2981727d",
+  "reference/f1_07_inbox/store.py": "50241b4ec95bd0fbe6a2de079b672eeded0885d00c4215f1d0f76da634816806",
+  "reference/f1_07_inbox/migrate.py": "b6b1033c3aa45b42db2a2d2e332cacfacd5574824030e38a2f43d55905a725dc",
+  "reference/first_task_leases/store.py": "4b4f1689530227c4c50bd4fd6f167e31fa9f1bf1c025f1e584276d93e7a2d54a",
+  "reference/f1_07_inbox/migrations/001_inbox_events.sql": "8c28a9934a418aea0688342ee6f6d1abf8b6085a7e22ad0d98b2f2629cd3168d",
+  "reference/first_task_leases/migrations/001_task_leases.sql": "0e39359128218d00c00366f890c08007cad33fb057840af0722c05b2a9a213c8"
+}

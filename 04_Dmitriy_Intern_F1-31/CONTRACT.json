@@ -1,0 +1,44 @@
+{
+  "task_id": "F1-31",
+  "candidate": "Дмитрий стажёр",
+  "abi": "build_migration_plan(root, *, schema=\"runtime_next\")",
+  "output": "MigrationPlan namedtuple(status,entries,required_preflight), status exactly PLANNED_NOT_AUTHORIZED, entries tuple of exactly three tuples (relative_path,sha256,raw_sql), required_preflight tuple of exact strings below",
+  "expected_paths": [
+    "migrations/002_sales_manager.sql",
+    "f1_07_inbox/migrations/001_inbox_events.sql",
+    "first_task_leases/migrations/001_task_leases.sql"
+  ],
+  "expected_sha256": {
+    "migrations/002_sales_manager.sql": "65222135321a281fa53c3327f8ef85d9bcd796437a79210414c0badf2981727d",
+    "f1_07_inbox/migrations/001_inbox_events.sql": "8c28a9934a418aea0688342ee6f6d1abf8b6085a7e22ad0d98b2f2629cd3168d",
+    "first_task_leases/migrations/001_task_leases.sql": "0e39359128218d00c00366f890c08007cad33fb057840af0722c05b2a9a213c8"
+  },
+  "preflight_order": [
+    "type(schema) is str and schema == \"runtime_next\" else ValueError(\"SCHEMA_UNSUPPORTED\")",
+    "type(root) is str or isinstance(root, pathlib.Path), otherwise ValueError(\"INVALID_ROOT\") before filesystem I/O; then reject syntactic .. and any symlink component with UNSAFE_PATH; then nonexistent/not-directory root ValueError(\"INVALID_ROOT\"); only then migration files checks",
+    "all manifest files resolve within root, no symlink component, no traversal; violation ValueError(\"UNSAFE_PATH\")",
+    "missing/nonregular file ValueError(\"MISSING_MIGRATION\")",
+    "any bytes differ from fixed SHA ValueError(\"HASH_MISMATCH\")"
+  ],
+  "validation": "Build locally and return only after every entry passes; fixed constants not caller editable; reject file or directory symlinks including root. Root syntactic .. component rejected UNSAFE_PATH after schema check and root type validation. No custom manifest or executor argument. No import I/O.",
+  "write_allowlist": [
+    "src/first_migration_plan.py",
+    "tests/test_candidate_*.py",
+    "fixtures/candidate_*",
+    "docs/IMPLEMENTATION.md",
+    "return/**"
+  ],
+  "scope": "Plan only, no READY/authorization/existence assertion and no foundation_ready flag. Existing externally verified foundation is prerequisite for later integration, not for reading SQL plan. No executor or effects. Raw placeholders unchanged.",
+  "required_preflight": [
+    "Existing externally verified runtime_next foundation including runtime_next.tasks and its original created_at/status columns; this package does not establish existence or compatibility.",
+    "Sales SQL fixed runtime_next namespace; do not rewrite SQL.",
+    "Inbox schema separately validated by existing f1_07_inbox.store.validate_schema and composed by existing f1_07_inbox.migrate._migration_statements/apply_migration.",
+    "Lease isolated schema and Identifier renderer require integration-owner verification; first_task_leases.store supplies no migration executor.",
+    "Integration owner verifies structure, migration lineage/replay, transaction behavior and regression before applying all entries."
+  ],
+  "project_id": "sales-manager-first",
+  "revision": "R1",
+  "stage": "PREPARED_NOT_ISSUED",
+  "external_effect_authorized": false,
+  "integration_performed": false
+}

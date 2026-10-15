@@ -1,0 +1,30 @@
+Python: 3.12.8 (tags/v3.12.8:2dc476b, Dec  3 2024, 19:30:04) [MSC v.1942 64 bit (AMD64)]
+
+COMMAND: C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe -B CHECK_PACKAGE.py
+PROTECTED_PASS
+
+EXIT_CODE: 0
+
+COMMAND: C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest discover -s tests -v
+test_directory_instead_of_sql_rejected (test_candidate_plan.CandidatePlanTests.test_directory_instead_of_sql_rejected) ... ok
+test_each_changed_migration_rejected (test_candidate_plan.CandidatePlanTests.test_each_changed_migration_rejected) ... ok
+test_exact_function_signature (test_candidate_plan.CandidatePlanTests.test_exact_function_signature) ... ok
+test_module_load_has_no_filesystem_io (test_candidate_plan.CandidatePlanTests.test_module_load_has_no_filesystem_io) ... ok
+test_schema_checked_before_filesystem (test_candidate_plan.CandidatePlanTests.test_schema_checked_before_filesystem) ... ok
+test_source_files_unchanged (test_candidate_plan.CandidatePlanTests.test_source_files_unchanged) ... ok
+test_string_root_supported (test_candidate_plan.CandidatePlanTests.test_string_root_supported) ... ok
+test_symlink_parent_directory_rejected (test_candidate_plan.CandidatePlanTests.test_symlink_parent_directory_rejected) ... ok
+test_symlink_root_rejected (test_candidate_plan.CandidatePlanTests.test_symlink_root_rejected) ... ok
+test_exact_deterministic_immutable (test_public.Public.test_exact_deterministic_immutable) ... ok
+test_guards (test_public.Public.test_guards) ... ok
+test_invalid_root (test_public.Public.test_invalid_root) ... ok
+test_missing_changed_and_symlink (test_public.Public.test_missing_changed_and_symlink) ... ok
+test_schema_precedes_root (test_public.Public.test_schema_precedes_root) ... ok
+test_traversal (test_public.Public.test_traversal) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.183s
+
+OK
+
+EXIT_CODE: 0

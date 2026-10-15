@@ -1,0 +1,4 @@
+# Возврат F1-31
+Адресат: Дмитрий стажёр. Вернуть ZIP с той же структурой: src/first_migration_plan.py, свои tests/test_candidate_*.py, fixtures/candidate_*, docs/IMPLEMENTATION.md, return/patch.diff, return/fullfiles/first_migration_plan.py, return/test.log, return/RESULT.json.
+В RESULT.json указать task_id, изменённые пути, команды, exit codes, PASS/FAIL/NOT_RUN, ограничения и integration_status=NOT_CONNECTED. Патч относительно выданного src, полный файл идентичен возвращённому src. Логи реальных запусков без секретов. Защищённые файлы сохраняются побайтно.
+Запустить python CHECK_PACKAGE.py, затем python -m unittest discover -s tests -v. Исходная заготовка намеренно даёт RED; возврат должен дать GREEN. Собственные тесты дополняют публичные, не заменяют. Не удалять, не skip и не ослаблять публичные проверки. Не запускать БД, сеть, миграции, worker или отправку.

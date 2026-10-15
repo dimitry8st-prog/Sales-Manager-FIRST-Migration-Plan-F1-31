@@ -1,0 +1,5 @@
+{
+  "migrations/002_sales_manager.sql": "65222135321a281fa53c3327f8ef85d9bcd796437a79210414c0badf2981727d",
+  "f1_07_inbox/migrations/001_inbox_events.sql": "8c28a9934a418aea0688342ee6f6d1abf8b6085a7e22ad0d98b2f2629cd3168d",
+  "first_task_leases/migrations/001_task_leases.sql": "0e39359128218d00c00366f890c08007cad33fb057840af0722c05b2a9a213c8"
+}
